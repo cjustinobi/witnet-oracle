@@ -5,12 +5,13 @@ import PriceFeed from '../artifacts/contracts/PriceFeeds.sol/PriceFeeds.json'
 import { useCelo } from '@celo/react-celo'
 
 
+
 const Home = () => {
   const { address } = useCelo()
   const Contract = useContract(PriceFeed.abi, priceFeedAddress)
 
   const getPriceFeeds = async () => {
-    const res = await getPriceFeed(Contract, '0x9Edd3fb21e1BC3dBE3c5BCf8AB8044c706AAEA9C')
+    const res = await getPriceFeed(Contract)
     console.log('test method ',res)
 
   }
@@ -26,14 +27,36 @@ const Home = () => {
   // }, [])
 
   useEffect(() => {
-    getPriceFeeds()
-  }, [])
+    if (address) {
+      getPriceFeeds()
+    }
+  }, [Contract])
 
 
   return (
     <section className="overflow-hidden text-gray-700">
       <div className="container px-5 py-2 mx-auto lg:pt-12 lg:px-32">
         <div className="flex flex-wrap -m-1 md:-m-2">
+
+          <div class="marquee">
+            <div class="inline-block w-64 bg-gray-100 shadow-md mx-4 rounded-lg animate-marquee">
+              Hello 2
+            </div>
+            <div class="inline-block w-64 bg-gray-100 shadow-md mx-4 rounded-lg animate-marquee">
+              Hello 2
+            </div>
+            <div class="inline-block w-64 bg-gray-100 shadow-md mx-4 rounded-lg animate-marquee">
+              Hello 2
+            </div>
+            <div class="inline-block w-64 bg-gray-100 shadow-md mx-4 rounded-lg animate-marquee">
+              Hello 2
+            </div>
+            <div class="inline-block w-64 bg-gray-100 shadow-md mx-4 rounded-lg animate-marquee">
+              Hello 2
+            </div>
+          </div>
+
+
           {/*{NFTs && NFTs.map(nft => <NFTCard nft={nft} key={nft.tokenId} updateUI={updateUI} />)}*/}
         </div>
       </div>

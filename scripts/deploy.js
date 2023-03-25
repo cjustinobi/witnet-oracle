@@ -1,5 +1,16 @@
 const fs = require('fs')
 
+const WITNET_PRICE_ROUTER = '0x6f8A7E2bBc1eDb8782145cD1089251f6e2C738AE'
+
+const ID4s = [
+  0x24beead4,
+  0x21a79821,
+  0x9ed884be,
+  0x3d15f701,
+  0x4d50c3a6,
+  0x31077f15
+]
+
 // We require the Hardhat Runtime Environment explicitly here. This is optional
 // but useful for running the script in a standalone fashion through `node <script>`.
 //
@@ -17,7 +28,7 @@ async function main() {
 
   // We get the contract to deploy
   const PriceFeeds = await hre.ethers.getContractFactory('PriceFeeds');
-  const priceFeeds = await PriceFeeds.deploy('0x6f8A7E2bBc1eDb8782145cD1089251f6e2C738AE', [0x21a79821]);
+  const priceFeeds = await PriceFeeds.deploy(WITNET_PRICE_ROUTER, ID4s);
 
   await priceFeeds.deployed();
 

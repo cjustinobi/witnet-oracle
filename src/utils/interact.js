@@ -1,5 +1,7 @@
 
-export const priceFeedAddress = '0xA93B1b35FBDC8668b7cE96811522CFc787bc29Be'
+import { ID4s } from './constants'
+
+export const priceFeedAddress = '0xFDBa5E9544411E19C5B4809Df0DE7337DCC67b64'
 
 export const createNFT = async (NFTContract, NFTURI, price, address) => {
   try {
@@ -9,81 +11,25 @@ export const createNFT = async (NFTContract, NFTURI, price, address) => {
   }
 }
 
-export const getNfts = async (NFTContract) => {
+export const getPriceFeed = async (contract) => {
+  console.log('contract ', contract)
   try {
+    const values = ID4s.map(obj => "0x" + Object.values(obj)[0].toString(16))
 
-    const NFTs = []
-    const NFTCount = await NFTContract.methods.getNFTCount().call()
+    let priceFeeds = []
 
-    for (let i = 1; i <= NFTCount; i++) {
-      const NFT = new Promise(async (resolve) => {
+    for (let i = 0; i < values.length; i++) {
+      const priceFeed = new Promise(async (resolve) => {
 
-        const NFTItem = await NFTContract.methods.getNFT(i).call()
-        const NFTURI = await NFTContract.methods.tokenURI(i).call()
-
-        // const NFTMeta = await getNFTMeta(NFTURI)
-
-        // resolve({
-        //   tokenId: NFTItem._NFTId,
-        //   price: NFTItem._price,
-        //   seller: NFTItem._seller,
-        //   forSale: NFTItem._forSale,
-        //   sales: NFTItem._sales,
-        //   earnings: NFTItem._earnings,
-        //   name: NFTMeta.name,
-        //   image: NFTMeta.image,
-        //   initialPrice: NFTMeta.price,
-        //   description: NFTMeta.description
-        // })
+        const priceFeed = await contract.methods.getPriceFeedLastValues(values[i]).call()
+        resolve({
+          price: (priceFeed._lastPrices / 1000000).toFixed(2)
+        })
       })
-      NFTs.push(NFT)
+      priceFeeds.push(priceFeed)
     }
-    return Promise.all(NFTs)
+    return Promise.all(priceFeeds)
   } catch (e) {
     console.log({ e })
-  }
-}
-
-export const getPriceFeed = async (NFTContract, address) => {
-
-  return await NFTContract.methods.getPriceFeedLastValues('0x21a79821').call()
-
-}
-
-
-export const getMyNFTs = async (NFTContract, address) => {
-  try {
-
-    const NFTCount = await NFTContract.methods.getMyNFTCount(address).call()
-
-    let NFTs = []
-
-    for (let i = 1; i < NFTCount; i++) {
-      const NFTItem = await NFTContract.methods.getMyNFTs(i, address).call()
-
-      if (NFTItem._sold) {
-        continue
-      }
-
-      const NFTURI = await NFTContract.methods.tokenURI(NFTItem._NFTId).call()
-
-      // const NFTMeta = await getNFTMeta(NFTURI)
-
-      // NFTs.push({
-      //   tokenId: NFTItem._NFTId,
-      //   price: NFTItem._price,
-      //   seller: NFTItem._seller,
-      //   forSale: NFTItem._forSale,
-      //   name: NFTMeta.name,
-      //   image: NFTMeta.image,
-      //   initialPrice: NFTMeta.price,
-      //   description: NFTMeta.description,
-      // })
-    }
-
-    return NFTs
-
-  } catch (e) {
-    console.log(e)
   }
 }
