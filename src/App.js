@@ -17,7 +17,7 @@ const WrappedApp = () => {
         chainId: 44787,
       }}
       dapp={{
-        name: 'NFT Marketplace for Tech Artisans',
+        name: 'How to use Witnet oracle network to display cryptocurrency prices',
         description: '',
         url: 'https://tech-artisans.vercel.app/',
       }}

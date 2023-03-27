@@ -8,10 +8,12 @@ contract PriceFeeds {
     IWitnetPriceRouter public immutable witnetPriceRouter;
     mapping(bytes4 => IWitnetPriceFeed) public priceFeeds;
     bytes4[] ID4;
+    uint256 public lastUpdateTime;
 
     constructor(IWitnetPriceRouter _router, bytes4[] memory _ID4) {
         witnetPriceRouter = _router;
         ID4 = _ID4;
+        lastUpdateTime = block.timestamp;
         updatePriceFeeds();
     }
 
@@ -25,7 +27,16 @@ contract PriceFeeds {
         }
     }
 
-    function getPriceFeedLastValues(bytes4 _ID4) public view returns (int256 _lastPrices, uint256 _lastTimestamps) {
+    function checkAndUpdatePriceFeeds() public {
+        if (block.timestamp >= lastUpdateTime + 60) { // Check if a minute has passed
+            updatePriceFeeds();
+            lastUpdateTime = block.timestamp; // Update last update time
+        }
+    }
+
+
+    function getPriceFeedLastValues(bytes4 _ID4) public returns (int256 _lastPrices, uint256 _lastTimestamps) {
+        checkAndUpdatePriceFeeds();
         IWitnetPriceFeed priceFeed = priceFeeds[_ID4];
         (int256 lastPrice, uint256 lastTimestamp, , ) = priceFeed.lastValue();
 

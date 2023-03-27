@@ -26,6 +26,8 @@ code {
 }
 
 .animate-marquee {
-  animation: animate-marquee 20s linear infinite;
+  animation: animate-marquee 2s linear infinite;
+  animation-play-state: running;
+  animation-direction: normal;
 }
 

@@ -1,10 +1,8 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { getPriceFeed, priceFeedAddress } from '../utils'
 import { useContract } from '../hooks'
 import PriceFeed from '../artifacts/contracts/PriceFeeds.sol/PriceFeeds.json'
 import { useCelo } from '@celo/react-celo'
-
-
 
 const Home = () => {
 
@@ -21,8 +19,18 @@ const Home = () => {
   useEffect(() => {
     if (address) {
       getPriceFeeds()
+
+      // Call getPriceFeeds every minute
+      const interval = setInterval(() => {
+        getPriceFeeds()
+      }, 60000)
+
+      // Cleanup function to clear the interval on unmount
+      return () => clearInterval(interval)
+    } else {
+      alert('Connect wallet to continue')
     }
-  }, [Contract])
+  }, [Contract, address])
 
 
   return (
