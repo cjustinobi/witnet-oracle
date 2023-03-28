@@ -18,4 +18,4 @@ run `npm install`
 - Hardhat
 
 ### Demo
-https://tech-artisans.netlify.app
+https://witnet-oracle.vercel.app/
